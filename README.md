@@ -139,7 +139,8 @@ kubectl exec -n unifiapay deployment/api-pagamentos-simple -- curl -s http://aud
 kubectl get services -n unifiapay
 ```
 
-**📸 TIRE PRINT:** Capture mostrando os serviços com ClusterIP e portas.
+<img width="919" height="218" alt="image" src="https://github.com/user-attachments/assets/5aa67dcc-0036-4247-9fea-2ab6dbe848e4" />
+
 
 ---
 
@@ -153,7 +154,8 @@ kubectl scale deployment api-pagamentos-simple -n unifiapay --replicas=2
 kubectl get pods -n unifiapay -l app=api-pagamentos
 ```
 
-**📸 TIRE PRINT:** Capture mostrando **2 pods** da API com status Running.
+<img width="925" height="173" alt="image" src="https://github.com/user-attachments/assets/7ae4441a-792f-4bd4-adb0-edcef2c88b79" />
+
 
 ---
 
@@ -165,7 +167,8 @@ kubectl scale deployment api-pagamentos-simple -n unifiapay --replicas=3
 kubectl get pods -n unifiapay -l app=api-pagamentos
 ```
 
-**📸 TIRE PRINT:** Capture mostrando **3 pods** da API com status Running.
+<img width="787" height="118" alt="image" src="https://github.com/user-attachments/assets/c605702e-7399-44f2-9ceb-fc606948c489" />
+
 
 ---
 
@@ -173,14 +176,11 @@ kubectl get pods -n unifiapay -l app=api-pagamentos
 
 **Comando:**
 ```powershell
-$PODS = (kubectl get pods -n unifiapay -l app=api-pagamentos -o jsonpath='{.items[*].metadata.name}') -split ' '
-foreach ($POD in $PODS) { 
-  Write-Host "`n=== Pod: $POD ==="
-  kubectl exec -n unifiapay $POD -- tail -3 /var/logs/api/instrucoes.log 
-}
+$PODS = (kubectl get pods -n unifiapay -l app=api-pagamentos -o jsonpath='{.items[*].metadata.name}') -split ' '; foreach ($POD in $PODS) { Write-Host "`n=== Pod: $POD ==="; kubectl exec -n unifiapay $POD -- tail -3 /var/logs/api/instrucoes.log }
 ```
 
-**📸 TIRE PRINT:** Capture mostrando os **3 pods lendo o mesmo arquivo** com conteúdo idêntico (mesmos IDs de transação).
+<img width="917" height="875" alt="image" src="https://github.com/user-attachments/assets/5f6f5d99-27b9-4726-943b-fbf6fa27b988" />
+
 
 ---
 
@@ -191,7 +191,8 @@ foreach ($POD in $PODS) {
 kubectl logs -n unifiapay -l app=auditoria-service --tail=20
 ```
 
-**📸 TIRE PRINT:** Capture mostrando logs de liquidação de transações.
+<img width="929" height="505" alt="image" src="https://github.com/user-attachments/assets/feee638e-0693-4735-8841-f24a3b5b538b" />
+
 
 ---
 
@@ -204,14 +205,8 @@ kubectl logs -n unifiapay -l app=auditoria-service --tail=20
 kubectl describe pod -n unifiapay -l app=api-pagamentos | Select-String -Pattern "Limits|Requests" -Context 0,3
 ```
 
-**📸 TIRE PRINT:** Capture mostrando:
-```
-Limits:
-  cpu:     500m
-  memory:  512Mi
-Requests:
-  cpu:     250m
-  memory:  256Mi
+<img width="930" height="567" alt="image" src="https://github.com/user-attachments/assets/09e9bfc7-bf3b-4c74-b793-17d9989267cc" />
+
 ```
 
 ---
@@ -220,13 +215,11 @@ Requests:
 
 **Comando:**
 ```powershell
-kubectl get pod -n unifiapay -l app=api-pagamentos -o jsonpath='{.items[0].spec.containers[0].securityContext}'
+kubectl get deployment api-pagamentos-simple -n unifiapay -o jsonpath='{.spec.template.spec.containers[0].securityContext}' | python -c "import sys; import json; data = sys.stdin.read().strip(); parsed = json.loads(data) if data else {}; print(json.dumps(parsed, indent=2))"
 ```
 
-**📸 TIRE PRINT:** Capture mostrando:
-```json
-{"runAsNonRoot":true,"runAsUser":1001}
-```
+<img width="921" height="190" alt="image" src="https://github.com/user-attachments/assets/991f49ca-022e-47de-a33b-9ccd4736f3c1" />
+
 
 ---
 
@@ -235,26 +228,28 @@ kubectl get pod -n unifiapay -l app=api-pagamentos -o jsonpath='{.items[0].spec.
 **Comando:**
 ```powershell
 kubectl get serviceaccount -n unifiapay
-kubectl get rolebinding -n unifiapay
+kubectl get clusterrolebinding kube-state-metrics
+kubectl describe clusterrolebinding kube-state-metrics
 ```
 
-**📸 TIRE PRINT:** Capture mostrando ServiceAccounts e RoleBindings criados.
+<img width="826" height="405" alt="image" src="https://github.com/user-attachments/assets/5f5cd2fd-8b7d-4415-90c0-71e2c58cb1c9" />
+
 
 ---
 
 #### Print 4: Métricas do Prometheus
 
-**Acesse:** http://localhost:9090/targets
+**Acesse:** http://localhost:30090/targets
 
-**📸 TIRE PRINT:** Capture mostrando targets UP (api-pagamentos, auditoria, kube-state-metrics).
+<img width="1892" height="948" alt="image" src="https://github.com/user-attachments/assets/4a1f57b4-1b3b-4f30-ad5a-4d46ae854516" />
 
 ---
 
 #### Print 5: Dashboard do Grafana
 
-**Acesse:** http://localhost:3000 (admin/admin)
+**Acesse:** (http://localhost:30300/d/unifiap-spb-complete/unifiap-pay-spb-sistema-completo?orgId=1&from=now-15m&to=now&timezone=browser&refresh=5s) (admin/admin)
 
-**📸 TIRE PRINT:** Capture o dashboard mostrando métricas de CPU, memória e requisições.
+<img width="1919" height="709" alt="image" src="https://github.com/user-attachments/assets/6fe2e8de-4967-43d6-83fe-b0beee84eb18" />
 
 ---
 
