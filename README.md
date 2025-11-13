@@ -251,7 +251,22 @@ kubectl describe clusterrolebinding kube-state-metrics
 
 <img width="1919" height="709" alt="image" src="https://github.com/user-attachments/assets/6fe2e8de-4967-43d6-83fe-b0beee84eb18" />
 
----
+--
+
+PRINTS DE ENTREGAS BONUS:
+
+Frontend funcional:
+
+<img width="1824" height="960" alt="image" src="https://github.com/user-attachments/assets/af48bcb7-c307-499e-8bb2-76aabea01c0e" />
+
+Rancher configurado com os workflows funcionais:
+
+<img width="1912" height="682" alt="image" src="https://github.com/user-attachments/assets/06b05613-cb4f-4343-8ae3-bdc859d02934" />
+
+Dashboard centralizado para acessar funcionalidades:
+
+<img width="1819" height="972" alt="image" src="https://github.com/user-attachments/assets/181992b3-6f12-449d-9535-47537ce1159f" />
+
 
 ## 4. Checklist de Entrega
 
@@ -279,5 +294,3 @@ kubectl describe clusterrolebinding kube-state-metrics
 - [ ] Print 5: Dashboard Grafana funcionando
 
 ---
-
-**Total: 14 prints = 9,0 pontos** ✅
