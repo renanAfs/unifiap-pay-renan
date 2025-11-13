@@ -284,9 +284,9 @@ docker build -t renanafs/unifiap-api-pagamentos:v1.93744 .```|---------------|--
 
 
 
-**📸 TIRE PRINT:** Capture a tela mostrando as linhas:
+![alt text](image-1.png) 
 
-- `[builder 1/5]` até `[builder 5/5]` ← Stage de compilação### PASSO 2: Criar Rede Docker Isolada| **api-pagamentos** | Banco Originador (UniFIAP Pay) | • Validar saldo da Reserva Bancária<br>• Registrar instrução PIX no arquivo compartilhado<br>• Status inicial: `AGUARDANDO_LIQUIDACAO` |- [1. Arquitetura da Solução e Contexto SPB](#1-arquitetura-da-solução-e-contexto-spb)
+Stage de compilação### PASSO 2: Criar Rede Docker Isolada| **api-pagamentos** | Banco Originador (UniFIAP Pay) | • Validar saldo da Reserva Bancária<br>• Registrar instrução PIX no arquivo compartilhado<br>• Status inicial: `AGUARDANDO_LIQUIDACAO` |- [1. Arquitetura da Solução e Contexto SPB](#1-arquitetura-da-solução-e-contexto-spb)
 
 - `[stage-1 1/6]` até `[stage-1 6/6]` ← Stage final
 
@@ -316,9 +316,9 @@ docker push renanafs/unifiap-frontend-pix:v1.93744# Validar criação
 
 docker network inspect unifiap_net
 
-**📸 TIRE PRINT:** Capture mostrando:
+![alt text](image-2.png)
 
-- `v1.93744: digest: sha256:...````### 1.3. Componentes da Infraestrutura  - [1.2. Papéis e Responsabilidades dos Microsserviços](#12-papéis-e-responsabilidades-dos-microsserviços-fluxo-spb)---![Python](https://img.shields.io/badge/python-3.11-blue.svg)
+![alt text](image-3.png)
 
 - Confirmação das 3 imagens publicadas
 
@@ -342,7 +342,7 @@ docker scout cves renanafs/unifiap-api-pagamentos:v1.93744
 
 
 
-**📸 TIRE PRINT:** Capture a seção que mostra:cd core/api-pagamentos- Kubernetes (Docker Desktop)
+![alt text](image-4.png)
 
 ```
 
@@ -378,7 +378,7 @@ docker network inspect unifiap_net
 
 
 
-**📸 TIRE PRINT:** Capture mostrando:docker build -t renanafs/unifiap-frontend-pix:v1.93744 .
+![alt text](image-5.png)
 
 ```json
 
@@ -418,7 +418,7 @@ kubectl exec -n unifiapay deployment/api-pagamentos-simple -- curl -s http://aud
 
 
 
-**📸 TIRE PRINT:** Capture mostrando resposta JSON do serviço de auditoriadocker scout cves renanafs/unifiap-api-pagamentos:v1.93744
+![alt text](image-6.png)
 
 
 
@@ -440,13 +440,9 @@ kubectl logs -n unifiapay deployment/api-pagamentos-simple --tail 20
 
 ### PASSO 5: Publicar no Docker Hub
 
-**📸 TIRE PRINT:** Capture linha mostrando:
+![alt text](image-7.png)
 
-```
-
-INFO:root:RESERVA_BANCARIA_SALDO carregado: R$ 1000000.00
-
-``````powershell---  - [3.1. Etapa 1: Docker e Imagem Segura (1,5 pts)](#31-etapa-1-docker-e-imagem-segura-15-pts)- [Pré-requisitos](#-pré-requisitos)
+  - [3.1. Etapa 1: Docker e Imagem Segura (1,5 pts)](#31-etapa-1-docker-e-imagem-segura-15-pts)- [Pré-requisitos](#-pré-requisitos)
 
 
 
@@ -472,13 +468,7 @@ kubectl get pods -n unifiapay -o wide
 
 # Push das imagens
 
-**📸 TIRE PRINT:** Capture mostrando 2 pods da API rodando:
-
-```docker push renanafs/unifiap-api-pagamentos:v1.93744
-
-api-pagamentos-simple-xxxxx-aaaaa   1/1   Running
-
-api-pagamentos-simple-xxxxx-bbbbb   1/1   Runningdocker push renanafs/unifiap-auditoria:v1.93744### PASSO 1: Pré-requisitos  - [3.3. Etapa 3: Kubernetes – Estrutura, Escala e Deploy (3,0 pts)](#33-etapa-3-kubernetes--estrutura-escala-e-deploy-30-pts)- [Instalação Passo a Passo](#-instalação-passo-a-passo)
+![alt text](image-8.png)
 
 ```
 
@@ -504,13 +494,7 @@ kubectl get pods -n unifiapay -l app=api-pagamentos-simple
 
 **IMPORTANTE:** Antes de aplicar, você precisa atualizar o arquivo `k8s/unifiap-pay-spb.yaml` para usar suas imagens do Docker Hub.# Verificar Docker Desktop com Kubernetes
 
-**📸 TIRE PRINT:** Capture mostrando agora **3 pods** da API
-
-
-
----
-
-Substitua todas as ocorrências de `image: codecaman/...` por `image: renanafs/...`:docker version- [Anexos](#anexos)- [Arquitetura do Sistema](#-arquitetura-do-sistema)Sistema de pagamentos PIX integrado com SPB (Sistema de Pagamentos Brasileiro), desenvolvido para demonstrar arquitetura de microsserviços com Kubernetes, monitoramento Prometheus/Grafana e gerenciamento via Rancher.![Rancher](https://img.shields.io/badge/rancher-v2.12-green.svg)- **RM:** 93744 
+![alt text](image-9.png)
 
 #### Print 3: Volume Compartilhado (Livro-Razão)
 
@@ -546,7 +530,7 @@ kubectl exec -n unifiapay $POD_AUDIT -- tail -5 /var/logs/api/instrucoes.log
 
 
 
-**📸 TIRE PRINT:** Capture mostrando os **3 pods lendo o mesmo arquivo** com linhas como:### PASSO 7: Deploy no Kubernetes
+![alt text](image-10.png)
 
 ```
 
