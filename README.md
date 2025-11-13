@@ -284,7 +284,8 @@ docker build -t renanafs/unifiap-api-pagamentos:v1.93744 .```|---------------|--
 
 
 
-![alt text](image-1.png) 
+<img width="922" height="820" alt="image" src="https://github.com/user-attachments/assets/d7c8bac4-3d73-4d8a-9669-8215aff5e18d" />
+
 
 Stage de compilação### PASSO 2: Criar Rede Docker Isolada| **api-pagamentos** | Banco Originador (UniFIAP Pay) | • Validar saldo da Reserva Bancária<br>• Registrar instrução PIX no arquivo compartilhado<br>• Status inicial: `AGUARDANDO_LIQUIDACAO` |- [1. Arquitetura da Solução e Contexto SPB](#1-arquitetura-da-solução-e-contexto-spb)
 
@@ -316,9 +317,11 @@ docker push renanafs/unifiap-frontend-pix:v1.93744# Validar criação
 
 docker network inspect unifiap_net
 
-![alt text](image-2.png)
+<img width="932" height="895" alt="image" src="https://github.com/user-attachments/assets/adca211e-3bbc-4574-94a0-00ca0faa1a12" />
 
-![alt text](image-3.png)
+
+<img width="1427" height="496" alt="image" src="https://github.com/user-attachments/assets/2bdff459-eb80-4bd3-8cd9-d6cf24b45e0b" />
+
 
 - Confirmação das 3 imagens publicadas
 
@@ -342,7 +345,8 @@ docker scout cves renanafs/unifiap-api-pagamentos:v1.93744
 
 
 
-![alt text](image-4.png)
+<img width="935" height="421" alt="image" src="https://github.com/user-attachments/assets/4791d2ea-2bd2-4a29-b4d7-1dc92432cdf8" />
+
 
 ```
 
@@ -378,7 +382,8 @@ docker network inspect unifiap_net
 
 
 
-![alt text](image-5.png)
+<img width="921" height="757" alt="image" src="https://github.com/user-attachments/assets/e0214ab3-6140-42f5-b01a-fb59b7d4d287" />
+
 
 ```json
 
@@ -417,8 +422,8 @@ kubectl exec -n unifiapay deployment/api-pagamentos-simple -- curl -s http://aud
 ```# Analisar imagens com Docker Scout**Recursos Compartilhados:**  - [2.4. Deploy no Kubernetes](#24-deploy-no-kubernetes)
 
 
+<img width="613" height="226" alt="image" src="https://github.com/user-attachments/assets/751d6360-b4cf-44f7-909e-d4dd5ca3bb7f" />
 
-![alt text](image-6.png)
 
 
 
@@ -440,7 +445,8 @@ kubectl logs -n unifiapay deployment/api-pagamentos-simple --tail 20
 
 ### PASSO 5: Publicar no Docker Hub
 
-![alt text](image-7.png)
+<img width="930" height="744" alt="image" src="https://github.com/user-attachments/assets/171466c7-b0b3-4bbf-baf9-2ba71bb62dc1" />
+
 
   - [3.1. Etapa 1: Docker e Imagem Segura (1,5 pts)](#31-etapa-1-docker-e-imagem-segura-15-pts)- [Pré-requisitos](#-pré-requisitos)
 
@@ -468,7 +474,8 @@ kubectl get pods -n unifiapay -o wide
 
 # Push das imagens
 
-![alt text](image-8.png)
+<img width="929" height="141" alt="image" src="https://github.com/user-attachments/assets/204bfeca-842e-4a21-bb2d-f19d01255c63" />
+
 
 ```
 
@@ -494,7 +501,8 @@ kubectl get pods -n unifiapay -l app=api-pagamentos-simple
 
 **IMPORTANTE:** Antes de aplicar, você precisa atualizar o arquivo `k8s/unifiap-pay-spb.yaml` para usar suas imagens do Docker Hub.# Verificar Docker Desktop com Kubernetes
 
-![alt text](image-9.png)
+<img width="926" height="139" alt="image" src="https://github.com/user-attachments/assets/da679313-76db-4d34-8780-c5a86ab0e0b1" />
+
 
 #### Print 3: Volume Compartilhado (Livro-Razão)
 
@@ -530,7 +538,8 @@ kubectl exec -n unifiapay $POD_AUDIT -- tail -5 /var/logs/api/instrucoes.log
 
 
 
-![alt text](image-10.png)
+<img width="923" height="842" alt="image" src="https://github.com/user-attachments/assets/e6731a82-34d0-45da-952f-0f76631045e8" />
+
 
 ```
 
