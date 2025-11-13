@@ -68,7 +68,8 @@ kubectl apply -f k8s/kube-state-metrics.yaml
 docker build -t renanafs/unifiap-api-pagamentos:v1.93744 core/api-pagamentos
 ```
 
-**📸 TIRE PRINT:** Capture mostrando linhas com `[builder 1/5]` até `[builder 5/5]` e `[stage-1 2/6]` até `[stage-1 6/6]`, comprovando multi-stage build.
+<img width="925" height="731" alt="image" src="https://github.com/user-attachments/assets/5c601bea-862d-4cf0-8cb8-9159a975ebb7" />
+
 
 ---
 
@@ -79,7 +80,8 @@ docker build -t renanafs/unifiap-api-pagamentos:v1.93744 core/api-pagamentos
 docker push renanafs/unifiap-api-pagamentos:v1.93744
 ```
 
-**📸 TIRE PRINT:** Capture a linha final mostrando:
+<img width="905" height="297" alt="image" src="https://github.com/user-attachments/assets/501a74e1-053f-490e-a1c3-25853a545444" />
+
 ```
 v1.93744: digest: sha256:... size: 856
 ```
@@ -93,7 +95,8 @@ v1.93744: digest: sha256:... size: 856
 docker scout cves renanafs/unifiap-api-pagamentos:v1.93744
 ```
 
-**📸 TIRE PRINT:** Capture a seção `## Overview` mostrando:
+<img width="678" height="270" alt="image" src="https://github.com/user-attachments/assets/23b5d685-7e8a-4f9b-94f4-4dc0df260d5a" />
+
 ```
 vulnerabilities │    0C     3H     5M    20L
 ```
@@ -109,7 +112,8 @@ vulnerabilities │    0C     3H     5M    20L
 kubectl logs -n unifiapay -l app=api-pagamentos --tail=50
 ```
 
-**📸 TIRE PRINT:** Capture a linha mostrando:
+<img width="931" height="728" alt="image" src="https://github.com/user-attachments/assets/b0d1626a-a9bc-42bf-93ed-b91d3ff850fd" />
+
 ```
 INFO - Iniciando API de Pagamentos - Reserva Bancária: R$ 1000000.00
 ```
@@ -123,7 +127,8 @@ INFO - Iniciando API de Pagamentos - Reserva Bancária: R$ 1000000.00
 kubectl exec -n unifiapay deployment/api-pagamentos-simple -- curl -s http://auditoria-service:8080/health
 ```
 
-**📸 TIRE PRINT:** Capture a resposta JSON do serviço de auditoria.
+<img width="928" height="97" alt="image" src="https://github.com/user-attachments/assets/63e8cc01-81b8-4856-91c1-9878f141cd40" />
+
 
 ---
 
