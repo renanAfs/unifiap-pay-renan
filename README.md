@@ -1,422 +1,842 @@
-# Desafio UniFIAP Pay SPB# Desafio UniFIAP Pay SPB# Desafio UniFIAP Pay SPB# 🚀 UniFIAP Pay SPB - Sistema de Pagamentos Instantâneos# 🚀 PROJETO COMPLETO 100%
+# Desafio UniFIAP Pay SPB# Desafio UniFIAP Pay SPB# Desafio UniFIAP Pay SPB# Desafio UniFIAP Pay SPB# 🚀 UniFIAP Pay SPB - Sistema de Pagamentos Instantâneos# 🚀 PROJETO COMPLETO 100%
 
 
 
-![Status](https://img.shields.io/badge/status-active-success.svg)
-
-![Kubernetes](https://img.shields.io/badge/kubernetes-v1.33-blue.svg)
-
-![Rancher](https://img.shields.io/badge/rancher-v2.12.3-green.svg)![Status](https://img.shields.io/badge/status-active-success.svg)
-
-![Python](https://img.shields.io/badge/python-3.11-blue.svg)
-
-![Docker](https://img.shields.io/badge/docker-latest-blue.svg)![Kubernetes](https://img.shields.io/badge/kubernetes-v1.33-blue.svg)
+## Dados do Aluno
 
 
 
-## Dados do Aluno![Rancher](https://img.shields.io/badge/rancher-v2.12.3-green.svg)![Status](https://img.shields.io/badge/status-active-success.svg)
-
-
-
-**Nome:** Renan Assi de Freitas  ![Python](https://img.shields.io/badge/python-3.11-blue.svg)
+**Nome:** Renan Assi de Freitas  ![Status](https://img.shields.io/badge/status-active-success.svg)
 
 **RM:** 93744  
 
-**Docker Hub:** renanafs  ![Docker](https://img.shields.io/badge/docker-latest-blue.svg)![Kubernetes](https://img.shields.io/badge/kubernetes-v1.33-blue.svg)
+**Docker Hub:** renanafs  ![Kubernetes](https://img.shields.io/badge/kubernetes-v1.33-blue.svg)
 
-**Total de Pontos:** 9,0 pts
+**Pontuação Total:** 9,0 pts
 
-
+![Rancher](https://img.shields.io/badge/rancher-v2.12.3-green.svg)![Status](https://img.shields.io/badge/status-active-success.svg)
 
 ---
+
+![Python](https://img.shields.io/badge/python-3.11-blue.svg)
+
+## 1. Arquitetura da Solução e Contexto SPB
+
+![Docker](https://img.shields.io/badge/docker-latest-blue.svg)![Kubernetes](https://img.shields.io/badge/kubernetes-v1.33-blue.svg)
+
+### 1.1. Descrição do Projeto
+
+
+
+Sistema de pagamentos PIX seguindo as regras do **SPB (Sistema de Pagamentos Brasileiro)** com arquitetura de microsserviços Cloud Native.
 
 ## Dados do Aluno![Rancher](https://img.shields.io/badge/rancher-v2.12.3-green.svg)![Status](https://img.shields.io/badge/status-active-success.svg)
 
-## 📋 Índice
+**Pilares do Desafio:**
 
+1. **Segurança** - Containers e redes isoladas
 
+2. **Orquestração** - Kubernetes para gerenciar a aplicação em escala
 
-1. [Arquitetura da Solução](#1-arquitetura-da-solução)
+3. **Regras de Negócio** - Reserva Bancária e Liquidação**Nome:** Renan Assi de Freitas  ![Python](https://img.shields.io/badge/python-3.11-blue.svg)
 
-2. [Instalação Completa](#2-instalação-completa)**Nome:** Renan Assi de Freitas  ![Python](https://img.shields.io/badge/python-3.11-blue.svg)
 
-3. [Evidências e Resultados](#3-evidências-e-resultados)
 
-4. [Comandos de Validação](#4-comandos-de-validação)**RM:** 93744  
+### 1.2. Papéis e Responsabilidades dos Microsserviços (Fluxo SPB)**RM:** 93744  
 
-5. [Troubleshooting](#5-troubleshooting)
 
-**Total de Pontos:** 9,0 pts![Docker](https://img.shields.io/badge/docker-latest-blue.svg)![Kubernetes](https://img.shields.io/badge/kubernetes-v1.33-blue.svg)
 
----
+| Microsserviço | Função Principal (Papel no SPB) | Responsabilidades de Código |**Docker Hub:** renanafs  ![Docker](https://img.shields.io/badge/docker-latest-blue.svg)![Kubernetes](https://img.shields.io/badge/kubernetes-v1.33-blue.svg)
 
+|---------------|----------------------------------|------------------------------|
 
+| **api-pagamentos** | Banco Originador (UniFIAP Pay) | 1. **Ler Saldo:** Consultar `RESERVA_BANCARIA_SALDO`<br>2. **Pré-Validar:** SE Valor PIX <= RESERVA_BANCARIA_SALDO<br>3. **Registrar:** Escrever no arquivo `/var/logs/api/instrucoes.log` com status `AGUARDANDO_LIQUIDACAO` |**Total de Pontos:** 9,0 pts
 
-## 1. Arquitetura da Solução
+| **auditoria-service** | Sistema de Liquidação (BACEN/STR) | 1. **Monitorar:** Ler `/var/logs/api/instrucoes.log`<br>2. **Liquidação:** Atualizar status para `LIQUIDADO`<br>3. **Automação:** Executar a cada 15 segundos |
 
----
+| **frontend-pix** | Interface do Usuário | Formulário web para transações PIX |
 
-### 1.1. Descrição
 
 
+### 1.3. Diagrama de Arquitetura---
 
-Sistema de pagamentos PIX seguindo as regras do **SPB (Sistema de Pagamentos Brasileiro)** com arquitetura de microsserviços Cloud Native.
 
-## 📋 Índice## Dados do Aluno![Rancher](https://img.shields.io/badge/rancher-v2.12.3-green.svg)![Status](https://img.shields.io/badge/status-active-success.svg)
 
-### 1.2. Microsserviços e Responsabilidades
+**Componentes:**## Dados do Aluno![Rancher](https://img.shields.io/badge/rancher-v2.12.3-green.svg)![Status](https://img.shields.io/badge/status-active-success.svg)
 
+- **Kubernetes** (Docker Desktop) - Orquestração
 
+- **Rancher v2.12.3** - Gerenciamento visual (https://localhost:8443)## 📋 Índice
 
-| Microsserviço | Função SPB | Responsabilidades |
+- **PersistentVolume** - `/var/logs/api/instrucoes.log` (Livro-Razão compartilhado)
 
-|---------------|------------|-------------------|1. [Arquitetura da Solução](#1-arquitetura-da-solução)
+- **ConfigMap** - `RESERVA_BANCARIA_SALDO=1000000.00`
 
-| **api-pagamentos** | Banco Originador (UniFIAP Pay) | • Validar saldo da Reserva Bancária<br>• Registrar instrução PIX no arquivo compartilhado<br>• Status inicial: `AGUARDANDO_LIQUIDACAO` |
+- **Prometheus + Grafana** - Monitoramento
 
-| **auditoria-service** | Sistema de Liquidação (BACEN/STR) | • Monitorar arquivo de instruções<br>• Processar liquidação a cada 15s<br>• Atualizar status para `LIQUIDADO` |2. [Instalação Completa](#2-instalação-completa)
+- **Kube-state-metrics** - Métricas do Kubernetes1. [Arquitetura da Solução](#1-arquitetura-da-solução)
 
-| **frontend-pix** | Interface do Usuário | • Formulário web para transações<br>• Comunicação com API de Pagamentos |
 
-3. [Evidências e Resultados](#3-evidências-e-resultados)**Nome:** Renan Assi de Freitas  ![Python](https://img.shields.io/badge/python-3.11-blue.svg)
 
-### 1.3. Componentes da Infraestrutura
+---2. [Instalação Completa](#2-instalação-completa)**Nome:** Renan Assi de Freitas  ![Python](https://img.shields.io/badge/python-3.11-blue.svg)
 
-4. [Comandos de Validação](#4-comandos-de-validação)
 
-**Orquestração:**
 
-- Kubernetes (Docker Desktop)5. [Troubleshooting](#5-troubleshooting)**RM:** 93744  
+## 2. Passos de Execução3. [Evidências e Resultados](#3-evidências-e-resultados)
 
-- Rancher v2.12.3 (https://localhost:8443)
 
 
+### 2.1. Configuração Local (Docker)4. [Comandos de Validação](#4-comandos-de-validação)**RM:** 93744  
 
-**Monitoramento:**
 
-- Prometheus (coleta de métricas)---**Total de Pontos Deste Desafio:** 9,0 pts![Docker](https://img.shields.io/badge/docker-latest-blue.svg)![Kubernetes](https://img.shields.io/badge/kubernetes-v1.33-blue.svg)
 
-- Grafana (dashboards)
+#### Criar Rede Docker Segmentada5. [Troubleshooting](#5-troubleshooting)
 
-- Kube-state-metrics (métricas do Kubernetes)
 
-- Node Exporter (métricas do sistema)
 
-## 1. Arquitetura da Solução
+```powershell**Total de Pontos:** 9,0 pts![Docker](https://img.shields.io/badge/docker-latest-blue.svg)![Kubernetes](https://img.shields.io/badge/kubernetes-v1.33-blue.svg)
 
-**Recursos Compartilhados:**
+docker network create --driver bridge --subnet 172.25.0.0/24 unifiap_net
 
-- PersistentVolume: `/var/logs/api/instrucoes.log` (Livro-Razão do SPB)
+```---
 
-- ConfigMap: `RESERVA_BANCARIA_SALDO=1000000.00`
 
-### 1.1. Descrição---
 
----
+### 2.2. Build e Publicação das Imagens (v1.93744)
 
 
 
-## 2. Instalação Completa
+#### Build com Multi-Stage## 1. Arquitetura da Solução
 
-Sistema de pagamentos PIX seguindo as regras do **SPB (Sistema de Pagamentos Brasileiro)** com arquitetura de microsserviços Cloud Native.
 
-### PASSO 1: Pré-requisitos
 
+```powershell---
 
+cd core/api-pagamentos
 
-```powershell
+docker build -t renanafs/unifiap-api-pagamentos:v1.93744 .### 1.1. Descrição
 
-# Verificar Docker Desktop com Kubernetes### 1.2. Microsserviços e Responsabilidades## 📋 ÍndiceSistema de pagamentos PIX integrado com SPB (Sistema de Pagamentos Brasileiro), desenvolvido para demonstrar arquitetura de microsserviços com Kubernetes, monitoramento Prometheus/Grafana e gerenciamento via Rancher.![Rancher](https://img.shields.io/badge/rancher-v2.12.3-green.svg)![Status](https://img.shields.io/badge/status-active-success.svg)## Dados do Aluno
 
-docker version
-
-kubectl version --client
-
-
-
-# Instalar dependência Python| Microsserviço | Função SPB | Responsabilidades |
-
-pip install requests
-
-```|---------------|------------|-------------------|
-
-
-
-### PASSO 2: Criar Rede Docker Isolada| **api-pagamentos** | Banco Originador (UniFIAP Pay) | • Validar saldo da Reserva Bancária<br>• Registrar instrução PIX no arquivo compartilhado<br>• Status inicial: `AGUARDANDO_LIQUIDACAO` |- [1. Arquitetura da Solução e Contexto SPB](#1-arquitetura-da-solução-e-contexto-spb)
-
-
-
-```powershell| **auditoria-service** | Sistema de Liquidação (BACEN/STR) | • Monitorar arquivo de instruções<br>• Processar liquidação a cada 15s<br>• Atualizar status para `LIQUIDADO` |
-
-# Criar rede customizada (172.25.0.0/24)
-
-docker network create --driver bridge --subnet 172.25.0.0/24 unifiap_net| **frontend-pix** | Interface do Usuário | • Formulário web para transações<br>• Comunicação com API de Pagamentos |  - [1.1. Descrição do Projeto](#11-descrição-do-projeto)
-
-
-
-# Validar criação
-
-docker network inspect unifiap_net
-
-```### 1.3. Componentes da Infraestrutura  - [1.2. Papéis e Responsabilidades dos Microsserviços](#12-papéis-e-responsabilidades-dos-microsserviços-fluxo-spb)---![Python](https://img.shields.io/badge/python-3.11-blue.svg)
-
-
-
-### PASSO 3: Build das Imagens Docker
-
-
-
-```powershell**Orquestração:**  - [1.3. Diagrama de Arquitetura](#13-diagrama-de-arquitetura)
-
-# Build api-pagamentos (tag v1.93744)
-
-cd core/api-pagamentos- Kubernetes (Docker Desktop)
-
-docker build -t renanafs/unifiap-api-pagamentos:v1.93744 .
-
-- Rancher v2.12.3 (https://localhost:8443)- [2. Passos de Execução](#2-passos-de-execução)
-
-# Build auditoria-service
 
 cd ../auditoria-service
 
 docker build -t renanafs/unifiap-auditoria:v1.93744 .
 
-**Monitoramento:**  - [2.1. Configuração Local (Docker)](#21-configuração-local-docker)
+Sistema de pagamentos PIX seguindo as regras do **SPB (Sistema de Pagamentos Brasileiro)** com arquitetura de microsserviços Cloud Native.
 
-# Build frontend-pix
+cd ../frontend-pix
 
-cd ../frontend-pix- Prometheus (coleta de métricas)
+docker build -t renanafs/unifiap-frontend-pix:v1.93744 .## 📋 Índice## Dados do Aluno![Rancher](https://img.shields.io/badge/rancher-v2.12.3-green.svg)![Status](https://img.shields.io/badge/status-active-success.svg)
 
-docker build -t renanafs/unifiap-frontend-pix:v1.93744 .
+cd ../..
 
-- Grafana (dashboards)  - [2.2. Build e Publicação das Imagens](#22-build-e-publicação-das-imagens-com-versão-e-rm-do-aluno)## 📋 Índice![Docker](https://img.shields.io/badge/docker-latest-blue.svg)![Kubernetes](https://img.shields.io/badge/kubernetes-v1.32-blue.svg)- **Nome:** Renan Assi de Freitas  
-
-# Voltar ao diretório raiz
-
-cd ../..- Kube-state-metrics (métricas do Kubernetes)
-
-```
-
-- Node Exporter (métricas do sistema)  - [2.3. Subindo o Rancher](#23-subindo-o-rancher-gerenciamento-de-containers)
-
-### PASSO 4: Varredura de Vulnerabilidades
+```### 1.2. Microsserviços e Responsabilidades
 
 
 
-```powershell
-
-# Analisar imagens com Docker Scout**Recursos Compartilhados:**  - [2.4. Deploy no Kubernetes](#24-deploy-no-kubernetes)
-
-docker scout cves renanafs/unifiap-api-pagamentos:v1.93744
-
-docker scout cves renanafs/unifiap-auditoria:v1.93744- PersistentVolume: `/var/logs/api/instrucoes.log` (Livro-Razão do SPB)
-
-docker scout cves renanafs/unifiap-frontend-pix:v1.93744
-
-```- ConfigMap: `RESERVA_BANCARIA_SALDO=1000000.00`- [3. Evidências e Resultados](#3-evidências-e-resultados)
+#### Publicação no Docker Hub
 
 
 
-### PASSO 5: Publicar no Docker Hub
-
-
-
-```powershell---  - [3.1. Etapa 1: Docker e Imagem Segura (1,5 pts)](#31-etapa-1-docker-e-imagem-segura-15-pts)- [Pré-requisitos](#-pré-requisitos)
-
-# Login no Docker Hub
+```powershell| Microsserviço | Função SPB | Responsabilidades |
 
 docker login
 
-# Username: renanafs
+docker push renanafs/unifiap-api-pagamentos:v1.93744|---------------|------------|-------------------|1. [Arquitetura da Solução](#1-arquitetura-da-solução)
 
-# Password: [sua senha]## 2. Instalação Completa  - [3.2. Etapa 2: Rede, Comunicação e Segmentação (2,5 pts)](#32-etapa-2-rede-comunicação-e-segmentação-25-pts)
+docker push renanafs/unifiap-auditoria:v1.93744
 
-
-
-# Push das imagens
-
-docker push renanafs/unifiap-api-pagamentos:v1.93744
-
-docker push renanafs/unifiap-auditoria:v1.93744### PASSO 1: Pré-requisitos  - [3.3. Etapa 3: Kubernetes – Estrutura, Escala e Deploy (3,0 pts)](#33-etapa-3-kubernetes--estrutura-escala-e-deploy-30-pts)- [Instalação Passo a Passo](#-instalação-passo-a-passo)
-
-docker push renanafs/unifiap-frontend-pix:v1.93744
+docker push renanafs/unifiap-frontend-pix:v1.93744| **api-pagamentos** | Banco Originador (UniFIAP Pay) | • Validar saldo da Reserva Bancária<br>• Registrar instrução PIX no arquivo compartilhado<br>• Status inicial: `AGUARDANDO_LIQUIDACAO` |
 
 ```
 
+| **auditoria-service** | Sistema de Liquidação (BACEN/STR) | • Monitorar arquivo de instruções<br>• Processar liquidação a cada 15s<br>• Atualizar status para `LIQUIDADO` |2. [Instalação Completa](#2-instalação-completa)
 
+#### Varredura de Vulnerabilidades
 
-### PASSO 6: Atualizar Manifestos Kubernetes```powershell  - [3.4. Etapa 4: Kubernetes – Segurança, Observação e Operação (2,0 pts)](#34-etapa-4-kubernetes--segurança-observação-e-operação-20-pts)
-
-
-
-**IMPORTANTE:** Antes de aplicar, você precisa atualizar o arquivo `k8s/unifiap-pay-spb.yaml` para usar suas imagens do Docker Hub.# Verificar Docker Desktop com Kubernetes
-
-
-
-Substitua todas as ocorrências de `image: codecaman/...` por `image: renanafs/...`:docker version- [Anexos](#anexos)- [Arquitetura do Sistema](#-arquitetura-do-sistema)Sistema de pagamentos PIX integrado com SPB (Sistema de Pagamentos Brasileiro), desenvolvido para demonstrar arquitetura de microsserviços com Kubernetes, monitoramento Prometheus/Grafana e gerenciamento via Rancher.![Rancher](https://img.shields.io/badge/rancher-v2.12-green.svg)- **RM:** 93744 
-
-
-
-```yamlkubectl version --client
-
-# Exemplo:
-
-image: renanafs/unifiap-api-pagamentos:v1.93744  - [Pré-requisitos](#pré-requisitos)
-
-image: renanafs/unifiap-auditoria:v1.93744
-
-image: renanafs/unifiap-frontend-pix:v1.93744# Instalar dependência Python
-
-```
-
-pip install requests  - [URLs de Acesso](#urls-de-acesso)- [Componentes](#-componentes)
-
-### PASSO 7: Deploy no Kubernetes
-
-```
+| **frontend-pix** | Interface do Usuário | • Formulário web para transações<br>• Comunicação com API de Pagamentos |
 
 ```powershell
 
-# Aplicar manifestos  - [Comandos Úteis](#comandos-úteis)
+docker scout cves renanafs/unifiap-api-pagamentos:v1.937443. [Evidências e Resultados](#3-evidências-e-resultados)**Nome:** Renan Assi de Freitas  ![Python](https://img.shields.io/badge/python-3.11-blue.svg)
 
-kubectl apply -f k8s/unifiap-pay-spb.yaml
+docker scout cves renanafs/unifiap-auditoria:v1.93744
 
-kubectl apply -f k8s/kube-state-metrics.yaml### PASSO 2: Criar Rede Docker Isolada
+docker scout cves renanafs/unifiap-frontend-pix:v1.93744### 1.3. Componentes da Infraestrutura
+
+```
+
+4. [Comandos de Validação](#4-comandos-de-validação)
+
+### 2.3. Subindo o Rancher
+
+**Orquestração:**
+
+```powershell
+
+docker-compose -f docker-compose.rancher.yml up -d- Kubernetes (Docker Desktop)5. [Troubleshooting](#5-troubleshooting)**RM:** 93744  
+
+```
+
+- Rancher v2.12.3 (https://localhost:8443)
+
+**Acesso:** https://localhost:8443  
+
+**Credenciais:** admin / unifiap123
 
 
 
-# Aguardar pods subirem (1-2 minutos)  - [Troubleshooting](#troubleshooting)- [URLs de Acesso](#-urls-de-acesso)
-
-kubectl get pods -n unifiapay -w
-
-``````powershell
+### 2.4. Deploy no Kubernetes**Monitoramento:**
 
 
 
-### PASSO 8: Configurar Prometheus# Criar rede customizada (172.25.0.0/24)
+```powershell- Prometheus (coleta de métricas)---**Total de Pontos Deste Desafio:** 9,0 pts![Docker](https://img.shields.io/badge/docker-latest-blue.svg)![Kubernetes](https://img.shields.io/badge/kubernetes-v1.33-blue.svg)
 
+# Deploy dos serviços
 
+kubectl apply -f k8s/unifiap-pay-spb.yaml- Grafana (dashboards)
 
-```powershelldocker network create --driver bridge --subnet 172.25.0.0/24 unifiap_net
+kubectl apply -f k8s/kube-state-metrics.yaml
 
-# Criar ConfigMap
+- Kube-state-metrics (métricas do Kubernetes)
 
-kubectl create configmap prometheus-config --from-file=monitoring/prometheus.yml -n unifiapay---- [Comandos Úteis](#-comandos-úteis)
+# Configurar Prometheus
 
-
-
-# Aplicar patch no deployment# Validar criação
+kubectl create configmap prometheus-config --from-file=monitoring/prometheus.yml -n unifiapay- Node Exporter (métricas do sistema)
 
 kubectl patch deployment prometheus -n unifiapay -p '{
 
-  "spec": {docker network inspect unifiap_net
+  "spec": {## 1. Arquitetura da Solução
 
     "template": {
 
-      "spec": {```
+      "spec": {**Recursos Compartilhados:**
 
-        "volumes": [
+        "volumes": [{"name": "config", "configMap": {"name": "prometheus-config"}}],
 
-          {## 1. Arquitetura da Solução e Contexto SPB- [Testes](#-testes)## 📋 Índice![Python](https://img.shields.io/badge/python-3.11-blue.svg)- **Total de Pontos Deste Desafio:** 9,0 pts  
+        "containers": [{- PersistentVolume: `/var/logs/api/instrucoes.log` (Livro-Razão do SPB)
 
-            "name": "config",
+          "name": "prometheus",
 
-            "configMap": {### PASSO 3: Build das Imagens Docker
+          "volumeMounts": [{"name": "config", "mountPath": "/etc/prometheus/prometheus.yml", "subPath": "prometheus.yml"}]- ConfigMap: `RESERVA_BANCARIA_SALDO=1000000.00`
 
-              "name": "prometheus-config"
+        }]
 
-            }
+      }### 1.1. Descrição---
 
-          }
+    }
 
-        ],```powershell
-
-        "containers": [
-
-          {# Build api-pagamentos (tag v1.93744)### 1.1. Descrição do Projeto- [Troubleshooting](#-troubleshooting)
-
-            "name": "prometheus",
-
-            "volumeMounts": [cd core/api-pagamentos
-
-              {
-
-                "name": "config",docker build -t codecaman/unifiap-api-pagamentos:v1.93744 .
-
-                "mountPath": "/etc/prometheus/prometheus.yml",
-
-                "subPath": "prometheus.yml"
-
-              }
-
-            ]# Build auditoria-serviceEste projeto implementa uma **arquitetura de microsserviços moderna na Nuvem (Cloud Native)** para a **UniFIAP Pay**.- [Estrutura do Projeto](#-estrutura-do-projeto)
-
-          }
-
-        ]cd ../auditoria-service
-
-      }
-
-    }docker build -t codecaman/unifiap-auditoria:v1.93744 .
-
-  }
+  }---
 
 }'
 
 
 
-# Aguardar restart# Build frontend-pixO objetivo é simular um **fluxo de pagamento PIX** seguindo as regras do **Sistema de Pagamentos Brasileiro (SPB)**, que exige compensação e liquidação através do Banco Central (STR).
+# Configurar Grafana
 
-kubectl rollout status deployment prometheus -n unifiapay
-
-cd ../frontend-pix
-
-# Recarregar configuração
-
-Start-Sleep -Seconds 15docker build -t codecaman/unifiap-frontend-pix:v1.93744 .
-
-curl -X POST http://localhost:30090/-/reload
-
-```
-
-
-
-### PASSO 9: Configurar Grafana# Voltar ao diretório raizO desafio foca em **três pilares**:---- [Pré-requisitos](#-pré-requisitos)
-
-
-
-```powershellcd ../..
-
-# Resetar senha do admin
-
-$POD_NAME = kubectl get pods -n unifiapay -l app=grafana -o jsonpath='{.items[0].metadata.name}'```
+$POD_NAME = kubectl get pods -n unifiapay -l app=grafana -o jsonpath='{.items[0].metadata.name}'## 2. Instalação Completa
 
 kubectl exec -n unifiapay $POD_NAME -- grafana-cli admin reset-admin-password admin
 
+python scripts/import-grafana-dashboard.pySistema de pagamentos PIX seguindo as regras do **SPB (Sistema de Pagamentos Brasileiro)** com arquitetura de microsserviços Cloud Native.
 
 
-# Importar dashboard (automático)
 
-Start-Sleep -Seconds 5### PASSO 4: Varredura de Vulnerabilidades1. **Segurança**: Construir containers e redes isoladas.
+# Importar cluster no Rancher (via interface web)### PASSO 1: Pré-requisitos
 
-python scripts/import-grafana-dashboard.py
+# 1. Cluster Management → Import Existing → Generic
+
+# 2. Nome: docker-desktop → Create
+
+# 3. Copiar comando curl e executar
+
+# 4. Aplicar patch:```powershell
+
+kubectl patch deployment cattle-cluster-agent -n cattle-system -p '{"spec":{"template":{"spec":{"hostNetwork":true}}}}'
+
+```# Verificar Docker Desktop com Kubernetes### 1.2. Microsserviços e Responsabilidades## 📋 ÍndiceSistema de pagamentos PIX integrado com SPB (Sistema de Pagamentos Brasileiro), desenvolvido para demonstrar arquitetura de microsserviços com Kubernetes, monitoramento Prometheus/Grafana e gerenciamento via Rancher.![Rancher](https://img.shields.io/badge/rancher-v2.12.3-green.svg)![Status](https://img.shields.io/badge/status-active-success.svg)## Dados do Aluno
+
+
+
+---docker version
+
+
+
+## 3. Evidências e Resultadoskubectl version --client
+
+
+
+### 3.1. Etapa 1: Docker e Imagem Segura (1,5 pts)
+
+
+
+#### Print 1: Docker Build Multi-Stage# Instalar dependência Python| Microsserviço | Função SPB | Responsabilidades |
+
+
+
+**Comando:**pip install requests
+
+```powershell
+
+docker build -t renanafs/unifiap-api-pagamentos:v1.93744 .```|---------------|------------|-------------------|
 
 ```
 
 
 
-### PASSO 10: Subir o Rancher```powershell2. **Orquestração**: Usar o Kubernetes para gerenciar a aplicação em escala.
+**📸 TIRE PRINT:** Capture a tela mostrando as linhas:
+
+- `[builder 1/5]` até `[builder 5/5]` ← Stage de compilação### PASSO 2: Criar Rede Docker Isolada| **api-pagamentos** | Banco Originador (UniFIAP Pay) | • Validar saldo da Reserva Bancária<br>• Registrar instrução PIX no arquivo compartilhado<br>• Status inicial: `AGUARDANDO_LIQUIDACAO` |- [1. Arquitetura da Solução e Contexto SPB](#1-arquitetura-da-solução-e-contexto-spb)
+
+- `[stage-1 1/6]` até `[stage-1 6/6]` ← Stage final
+
+- `=> naming to docker.io/renanafs/unifiap-api-pagamentos:v1.93744`
 
 
 
-```powershell# Analisar imagens com Docker Scout
+---```powershell| **auditoria-service** | Sistema de Liquidação (BACEN/STR) | • Monitorar arquivo de instruções<br>• Processar liquidação a cada 15s<br>• Atualizar status para `LIQUIDADO` |
 
-# Iniciar container do Rancher
+
+
+#### Print 2: Docker Push# Criar rede customizada (172.25.0.0/24)
+
+
+
+**Comando:**docker network create --driver bridge --subnet 172.25.0.0/24 unifiap_net| **frontend-pix** | Interface do Usuário | • Formulário web para transações<br>• Comunicação com API de Pagamentos |  - [1.1. Descrição do Projeto](#11-descrição-do-projeto)
+
+```powershell
+
+docker push renanafs/unifiap-api-pagamentos:v1.93744
+
+docker push renanafs/unifiap-auditoria:v1.93744
+
+docker push renanafs/unifiap-frontend-pix:v1.93744# Validar criação
+
+```
+
+docker network inspect unifiap_net
+
+**📸 TIRE PRINT:** Capture mostrando:
+
+- `v1.93744: digest: sha256:...````### 1.3. Componentes da Infraestrutura  - [1.2. Papéis e Responsabilidades dos Microsserviços](#12-papéis-e-responsabilidades-dos-microsserviços-fluxo-spb)---![Python](https://img.shields.io/badge/python-3.11-blue.svg)
+
+- Confirmação das 3 imagens publicadas
+
+
+
+---
+
+### PASSO 3: Build das Imagens Docker
+
+#### Print 3: Docker Scout (Vulnerabilidades)
+
+
+
+**Comando:**
+
+```powershell```powershell**Orquestração:**  - [1.3. Diagrama de Arquitetura](#13-diagrama-de-arquitetura)
+
+docker scout cves renanafs/unifiap-api-pagamentos:v1.93744
+
+```# Build api-pagamentos (tag v1.93744)
+
+
+
+**📸 TIRE PRINT:** Capture a seção que mostra:cd core/api-pagamentos- Kubernetes (Docker Desktop)
+
+```
+
+## Overviewdocker build -t renanafs/unifiap-api-pagamentos:v1.93744 .
+
+  vulnerabilities │    0C     3H     5M    20L
+
+```- Rancher v2.12.3 (https://localhost:8443)- [2. Passos de Execução](#2-passos-de-execução)
+
+**Destaque:** `0C` = **0 CRITICAL** ✅
+
+# Build auditoria-service
+
+---
+
+cd ../auditoria-service
+
+### 3.2. Etapa 2: Rede, Comunicação e Segmentação (2,5 pts)
+
+docker build -t renanafs/unifiap-auditoria:v1.93744 .
+
+#### Print 1: Rede Docker Customizada
+
+**Monitoramento:**  - [2.1. Configuração Local (Docker)](#21-configuração-local-docker)
+
+**Comando:**
+
+```powershell# Build frontend-pix
+
+docker network inspect unifiap_net
+
+```cd ../frontend-pix- Prometheus (coleta de métricas)
+
+
+
+**📸 TIRE PRINT:** Capture mostrando:docker build -t renanafs/unifiap-frontend-pix:v1.93744 .
+
+```json
+
+"IPAM": {- Grafana (dashboards)  - [2.2. Build e Publicação das Imagens](#22-build-e-publicação-das-imagens-com-versão-e-rm-do-aluno)## 📋 Índice![Docker](https://img.shields.io/badge/docker-latest-blue.svg)![Kubernetes](https://img.shields.io/badge/kubernetes-v1.32-blue.svg)- **Nome:** Renan Assi de Freitas  
+
+    "Config": [
+
+        {# Voltar ao diretório raiz
+
+            "Subnet": "172.25.0.0/24"
+
+        }cd ../..- Kube-state-metrics (métricas do Kubernetes)
+
+    ]
+
+}```
+
+```
+
+- Node Exporter (métricas do sistema)  - [2.3. Subindo o Rancher](#23-subindo-o-rancher-gerenciamento-de-containers)
+
+---
+
+### PASSO 4: Varredura de Vulnerabilidades
+
+#### Print 2: Comunicação Entre Containers
+
+
+
+**Comando:**
+
+```powershell```powershell
+
+kubectl exec -n unifiapay deployment/api-pagamentos-simple -- curl -s http://auditoria-service:5001/health
+
+```# Analisar imagens com Docker Scout**Recursos Compartilhados:**  - [2.4. Deploy no Kubernetes](#24-deploy-no-kubernetes)
+
+
+
+**📸 TIRE PRINT:** Capture mostrando resposta JSON do serviço de auditoriadocker scout cves renanafs/unifiap-api-pagamentos:v1.93744
+
+
+
+---docker scout cves renanafs/unifiap-auditoria:v1.93744- PersistentVolume: `/var/logs/api/instrucoes.log` (Livro-Razão do SPB)
+
+
+
+#### Print 3: Leitura de RESERVA_BANCARIA_SALDOdocker scout cves renanafs/unifiap-frontend-pix:v1.93744
+
+
+
+**Comando:**```- ConfigMap: `RESERVA_BANCARIA_SALDO=1000000.00`- [3. Evidências e Resultados](#3-evidências-e-resultados)
+
+```powershell
+
+kubectl logs -n unifiapay deployment/api-pagamentos-simple --tail 20
+
+```
+
+### PASSO 5: Publicar no Docker Hub
+
+**📸 TIRE PRINT:** Capture linha mostrando:
+
+```
+
+INFO:root:RESERVA_BANCARIA_SALDO carregado: R$ 1000000.00
+
+``````powershell---  - [3.1. Etapa 1: Docker e Imagem Segura (1,5 pts)](#31-etapa-1-docker-e-imagem-segura-15-pts)- [Pré-requisitos](#-pré-requisitos)
+
+
+
+---# Login no Docker Hub
+
+
+
+### 3.3. Etapa 3: Kubernetes – Estrutura, Escala e Deploy (3,0 pts)docker login
+
+
+
+#### Print 1: Pods com 2 Réplicas# Username: renanafs
+
+
+
+**Comando:**# Password: [sua senha]## 2. Instalação Completa  - [3.2. Etapa 2: Rede, Comunicação e Segmentação (2,5 pts)](#32-etapa-2-rede-comunicação-e-segmentação-25-pts)
+
+```powershell
+
+kubectl get pods -n unifiapay -o wide
+
+```
+
+# Push das imagens
+
+**📸 TIRE PRINT:** Capture mostrando 2 pods da API rodando:
+
+```docker push renanafs/unifiap-api-pagamentos:v1.93744
+
+api-pagamentos-simple-xxxxx-aaaaa   1/1   Running
+
+api-pagamentos-simple-xxxxx-bbbbb   1/1   Runningdocker push renanafs/unifiap-auditoria:v1.93744### PASSO 1: Pré-requisitos  - [3.3. Etapa 3: Kubernetes – Estrutura, Escala e Deploy (3,0 pts)](#33-etapa-3-kubernetes--estrutura-escala-e-deploy-30-pts)- [Instalação Passo a Passo](#-instalação-passo-a-passo)
+
+```
+
+docker push renanafs/unifiap-frontend-pix:v1.93744
+
+---
+
+```
+
+#### Print 2: Escala Horizontal
+
+
+
+**Comando:**
+
+```powershell### PASSO 6: Atualizar Manifestos Kubernetes```powershell  - [3.4. Etapa 4: Kubernetes – Segurança, Observação e Operação (2,0 pts)](#34-etapa-4-kubernetes--segurança-observação-e-operação-20-pts)
+
+kubectl scale deployment api-pagamentos-simple -n unifiapay --replicas=3
+
+kubectl get pods -n unifiapay -l app=api-pagamentos-simple
+
+```
+
+**IMPORTANTE:** Antes de aplicar, você precisa atualizar o arquivo `k8s/unifiap-pay-spb.yaml` para usar suas imagens do Docker Hub.# Verificar Docker Desktop com Kubernetes
+
+**📸 TIRE PRINT:** Capture mostrando agora **3 pods** da API
+
+
+
+---
+
+Substitua todas as ocorrências de `image: codecaman/...` por `image: renanafs/...`:docker version- [Anexos](#anexos)- [Arquitetura do Sistema](#-arquitetura-do-sistema)Sistema de pagamentos PIX integrado com SPB (Sistema de Pagamentos Brasileiro), desenvolvido para demonstrar arquitetura de microsserviços com Kubernetes, monitoramento Prometheus/Grafana e gerenciamento via Rancher.![Rancher](https://img.shields.io/badge/rancher-v2.12-green.svg)- **RM:** 93744 
+
+#### Print 3: Volume Compartilhado (Livro-Razão)
+
+
+
+**Comando:**
+
+```powershell```yamlkubectl version --client
+
+# Pod 1 da API
+
+$POD1 = kubectl get pods -n unifiapay -l app=api-pagamentos-simple -o jsonpath='{.items[0].metadata.name}'# Exemplo:
+
+kubectl exec -n unifiapay $POD1 -- tail -5 /var/logs/api/instrucoes.log
+
+image: renanafs/unifiap-api-pagamentos:v1.93744  - [Pré-requisitos](#pré-requisitos)
+
+# Pod 2 da API
+
+$POD2 = kubectl get pods -n unifiapay -l app=api-pagamentos-simple -o jsonpath='{.items[1].metadata.name}'image: renanafs/unifiap-auditoria:v1.93744
+
+kubectl exec -n unifiapay $POD2 -- tail -5 /var/logs/api/instrucoes.log
+
+image: renanafs/unifiap-frontend-pix:v1.93744# Instalar dependência Python
+
+# Pod da Auditoria
+
+$POD_AUDIT = kubectl get pods -n unifiapay -l app=auditoria-simple -o jsonpath='{.items[0].metadata.name}'```
+
+kubectl exec -n unifiapay $POD_AUDIT -- tail -5 /var/logs/api/instrucoes.log
+
+```pip install requests  - [URLs de Acesso](#urls-de-acesso)- [Componentes](#-componentes)
+
+
+
+**📸 TIRE PRINT:** Capture mostrando os **3 pods lendo o mesmo arquivo** com linhas como:### PASSO 7: Deploy no Kubernetes
+
+```
+
+2025-11-13 15:30:25|uuid|chave|valor|STATUS```
+
+```
+
+```powershell
+
+---
+
+# Aplicar manifestos  - [Comandos Úteis](#comandos-úteis)
+
+#### Print 4: Monitoramento Contínuo (Auditoria)
+
+kubectl apply -f k8s/unifiap-pay-spb.yaml
+
+**Comando:**
+
+```powershellkubectl apply -f k8s/kube-state-metrics.yaml### PASSO 2: Criar Rede Docker Isolada
+
+kubectl logs -n unifiapay deployment/auditoria-simple --tail 30
+
+```
+
+
+
+**📸 TIRE PRINT:** Capture mostrando logs:# Aguardar pods subirem (1-2 minutos)  - [Troubleshooting](#troubleshooting)- [URLs de Acesso](#-urls-de-acesso)
+
+```
+
+INFO:root:[2025-11-13 15:30:40] Iniciando ciclo de liquidação...kubectl get pods -n unifiapay -w
+
+INFO:root:Encontradas X transações aguardando liquidação
+
+INFO:root:✅ Liquidação concluída``````powershell
+
+```
+
+
+
+---
+
+### PASSO 8: Configurar Prometheus# Criar rede customizada (172.25.0.0/24)
+
+### 3.4. Etapa 4: Kubernetes – Segurança, Observação e Operação (2,0 pts)
+
+
+
+#### Print 1: Limites de Recursos
+
+```powershelldocker network create --driver bridge --subnet 172.25.0.0/24 unifiap_net
+
+**Comando:**
+
+```powershell# Criar ConfigMap
+
+kubectl top pods -n unifiapay
+
+```kubectl create configmap prometheus-config --from-file=monitoring/prometheus.yml -n unifiapay---- [Comandos Úteis](#-comandos-úteis)
+
+
+
+**📸 TIRE PRINT:** Capture mostrando uso de CPU e Memória de cada pod
+
+
+
+---# Aplicar patch no deployment# Validar criação
+
+
+
+#### Print 2: SecurityContextkubectl patch deployment prometheus -n unifiapay -p '{
+
+
+
+**Comando:**  "spec": {docker network inspect unifiap_net
+
+```powershell
+
+kubectl get deployment api-pagamentos-simple -n unifiapay -o yaml | Select-String -Pattern "securityContext" -Context 5    "template": {
+
+```
+
+      "spec": {```
+
+**📸 TIRE PRINT:** Capture mostrando:
+
+```yaml        "volumes": [
+
+securityContext:
+
+  runAsNonRoot: true          {## 1. Arquitetura da Solução e Contexto SPB- [Testes](#-testes)## 📋 Índice![Python](https://img.shields.io/badge/python-3.11-blue.svg)- **Total de Pontos Deste Desafio:** 9,0 pts  
+
+  runAsUser: 1000
+
+  allowPrivilegeEscalation: false            "name": "config",
+
+```
+
+            "configMap": {### PASSO 3: Build das Imagens Docker
+
+---
+
+              "name": "prometheus-config"
+
+#### Print 3: Deploy Inseguro (Tentativa)
+
+            }
+
+**Comando:**
+
+```powershell          }
+
+kubectl run test-insecure --image=nginx -n unifiapay --overrides='{
+
+  "spec": {        ],```powershell
+
+    "containers": [{
+
+      "name": "nginx",        "containers": [
+
+      "image": "nginx",
+
+      "securityContext": {"privileged": true}          {# Build api-pagamentos (tag v1.93744)### 1.1. Descrição do Projeto- [Troubleshooting](#-troubleshooting)
+
+    }]
+
+  }            "name": "prometheus",
+
+}'
+
+            "volumeMounts": [cd core/api-pagamentos
+
+kubectl describe pod test-insecure -n unifiapay
+
+```              {
+
+
+
+**📸 TIRE PRINT:** Capture mostrando a criação do pod e a descrição                "name": "config",docker build -t codecaman/unifiap-api-pagamentos:v1.93744 .
+
+
+
+---                "mountPath": "/etc/prometheus/prometheus.yml",
+
+
+
+#### Print 4: Permissões ServiceAccount                "subPath": "prometheus.yml"
+
+
+
+**Comando:**              }
+
+```powershell
+
+kubectl auth can-i create pods --as=system:serviceaccount:unifiapay:default -n unifiapay            ]# Build auditoria-serviceEste projeto implementa uma **arquitetura de microsserviços moderna na Nuvem (Cloud Native)** para a **UniFIAP Pay**.- [Estrutura do Projeto](#-estrutura-do-projeto)
+
+kubectl auth can-i delete deployments --as=system:serviceaccount:unifiapay:default -n unifiapay
+
+kubectl auth can-i get pods --as=system:serviceaccount:unifiapay:default -n unifiapay          }
+
+```
+
+        ]cd ../auditoria-service
+
+**📸 TIRE PRINT:** Capture mostrando:
+
+```      }
+
+no   ← create pods (negado)
+
+no   ← delete deployments (negado)    }docker build -t codecaman/unifiap-auditoria:v1.93744 .
+
+yes  ← get pods (permitido)
+
+```  }
+
+
+
+---}'
+
+
+
+## 4. Comandos Úteis
+
+
+
+### Verificar Status# Aguardar restart# Build frontend-pixO objetivo é simular um **fluxo de pagamento PIX** seguindo as regras do **Sistema de Pagamentos Brasileiro (SPB)**, que exige compensação e liquidação através do Banco Central (STR).
+
+
+
+```powershellkubectl rollout status deployment prometheus -n unifiapay
+
+kubectl get pods -n unifiapay
+
+kubectl get svc -n unifiapaycd ../frontend-pix
+
+kubectl get deployments -n unifiapay
+
+```# Recarregar configuração
+
+
+
+### Testar PIXStart-Sleep -Seconds 15docker build -t codecaman/unifiap-frontend-pix:v1.93744 .
+
+
+
+```powershellcurl -X POST http://localhost:30090/-/reload
+
+curl -X POST http://localhost:30050/pix -H "Content-Type: application/json" -d @test-pix.json
+
+``````
+
+
+
+### Acessos
+
+
+
+| Serviço | URL | Credenciais |### PASSO 9: Configurar Grafana# Voltar ao diretório raizO desafio foca em **três pilares**:---- [Pré-requisitos](#-pré-requisitos)
+
+|---------|-----|-------------|
+
+| Frontend PIX | http://localhost:30082 | - |
+
+| Grafana | http://localhost:30300 | admin / admin |
+
+| Prometheus | http://localhost:30090 | - |```powershellcd ../..
+
+| Rancher | https://localhost:8443 | admin / unifiap123 |
+
+# Resetar senha do admin
+
+---
+
+$POD_NAME = kubectl get pods -n unifiapay -l app=grafana -o jsonpath='{.items[0].metadata.name}'```
+
+## 📊 Checklist de Evidências
+
+kubectl exec -n unifiapay $POD_NAME -- grafana-cli admin reset-admin-password admin
+
+### Etapa 1 (1,5 pts)
+
+- [ ] Print do `docker build` mostrando multi-stage
+
+- [ ] Print do `docker push` com tag v1.93744
+
+- [ ] Print do `docker scout` com 0 CRITICAL# Importar dashboard (automático)
+
+
+
+### Etapa 2 (2,5 pts)Start-Sleep -Seconds 5### PASSO 4: Varredura de Vulnerabilidades1. **Segurança**: Construir containers e redes isoladas.
+
+- [ ] Print do `docker network inspect` mostrando 172.25.0.0/24
+
+- [ ] Print do `curl` entre containerspython scripts/import-grafana-dashboard.py
+
+- [ ] Print dos logs mostrando RESERVA_BANCARIA_SALDO
+
+```
+
+### Etapa 3 (3,0 pts)
+
+- [ ] Print do `kubectl get pods` com 2 réplicas
+
+- [ ] Print do `kubectl scale` mostrando 3 réplicas
+
+- [ ] Print dos 3 pods lendo mesmo arquivo### PASSO 10: Subir o Rancher```powershell2. **Orquestração**: Usar o Kubernetes para gerenciar a aplicação em escala.
+
+- [ ] Print dos logs da auditoria processando
+
+
+
+### Etapa 4 (2,0 pts)
+
+- [ ] Print do `kubectl top pods````powershell# Analisar imagens com Docker Scout
+
+- [ ] Print do YAML com securityContext
+
+- [ ] Print da tentativa de pod privilegiado# Iniciar container do Rancher
+
+- [ ] Print do `kubectl auth can-i`
 
 docker-compose -f docker-compose.rancher.yml up -ddocker scout cves codecaman/unifiap-api-pagamentos:v1.937443. **Regras de Negócio**: Aplicar a lógica da Reserva Bancária e Liquidação.## 🔧 Pré-requisitos- [Instalação Completa](#-instalação-completa)
 
+---
 
+
+
+**Autor:** Renan Assi de Freitas | **RM:** 93744 | **FIAP** - Pós Tech Software Architecture
 
 # Aguardar inicialização (60 segundos)docker scout cves codecaman/unifiap-auditoria:v1.93744
 
